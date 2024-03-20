@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Box, Button, MenuItem, Paper, Stack, TextField } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -11,7 +11,7 @@ function MuiTinyMceTxtEditor() {
     date: "",
   };
   const handleSubmit = (values, { resetForm }) => {
-    fetch(process.env.REACT_APP_URL_SERVER + "api/v1/posts", {
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/posts`, {
       method: "POST",
       body: JSON.stringify({
         ...values,
@@ -97,20 +97,36 @@ function MuiTinyMceTxtEditor() {
               )}
             </Field>
             <Editor
-              apiKey={process.env.REACT_APP_TINYAPIKEY}
+              tinymceScriptSrc={`${process.env.PUBLIC_URL}/tinymce/tinymce.min.js`}
               onInit={(evt, editor) => (editorRef.current = editor)}
               initialValue="<h1>This is the initial value of the editor</h1>"
               init={{
                 height: 500,
                 menubar: true,
                 plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "print",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "paste",
+                  "help",
+                  "wordcount",
                 ],
                 toolbar:
-                  "undo redo | formatselect | " +
-                  "bold italic backcolor | alignleft aligncenter " +
+                  "undo redo | formatselect | blocks | " +
+                  "bold italic backcolor forecolor | alignleft aligncenter " +
                   "alignright alignjustify | bullist numlist outdent indent | " +
                   "removeformat | help",
                 content_style:

@@ -4,17 +4,15 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MuiAdminNavBar from "../components/MuiAdminNavBar";
 
 function MuiAdminPage() {
-  const location = useLocation();
   const nav = useNavigate();
+  const location = useLocation();
   useEffect(() => {
-    fetch(process.env.REACT_APP_URL_SERVER + "api/v1/admin/login", {
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/login`, {
       credentials: "include",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data?.adminAuth) {
           nav("/admin/home", {
             state: { adminData: data.adminAuth.adminData },

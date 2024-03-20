@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 function MuiAdminNavBar({ login }) {
   const nav = useNavigate();
   const handleLogout = () => {
-    fetch(process.env.REACT_APP_URL_SERVER + "api/v1/admin/logout", {
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/logout`, {
       method: "POST",
       credentials: "include",
     })

@@ -22,7 +22,7 @@ function MuiPostsHome() {
   const { postTitle } = useParams();
   console.log(useLocation());
   useEffect(() => {
-    fetch(process.env.REACT_APP_URL_SERVER + `api/v1/posts/name/${postTitle}`)
+    fetch(`http://localhost:5000/api/v1/posts/name/${postTitle}`)
       .then((res) => res.json())
       .then((data) => (data.message === "OK" ? setPostData(data.data) : null));
   }, []);

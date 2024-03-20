@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 function MuiAdminHome() {
   const nav = useNavigate();
   useEffect(() => {
-    fetch(process.env.REACT_APP_URL_SERVER + "api/v1/admin/login", {
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/login`, {
       credentials: "include",
     })
       .then((res) => res.json())

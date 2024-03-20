@@ -28,14 +28,26 @@ function MuiHomeSectionBody() {
   };
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_URL_SERVER + "api/v1/posts")
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/posts`)
       .then((res) => res.json())
-      .then((data) => setPosts(data.data))
+      .then((data) => {
+        console.log(data);
+        setPosts(data.data);
+      })
       .catch((err) => console.error("error from retreiving posts: ", err));
   }, []);
-  console.log(posts)
+  console.log(posts);
   return (
-    <Box p={2}>
+    <Box
+      p={2}
+      height={"60vh"}
+      sx={{
+        overflowX: "hidden",
+        overflowY: "scroll",
+        scrollbarWidth:"none",
+        scrollBehavior: "smooth",
+      }}
+    >
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList
