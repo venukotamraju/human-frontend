@@ -129,8 +129,8 @@ function MuiTinyMceTxtEditor() {
               )}
             </Field>
             <Editor
-              apiKey={`${process.env.REACT_APP_TINYAPIKEY}`}
-              // tinymceScriptSrc={`${process.env.PUBLIC_URL}/tinymce/tinymce.min.js`}
+              // apiKey={`${process.env.REACT_APP_TINYAPIKEY}`}
+              tinymceScriptSrc={`${process.env.PUBLIC_URL}/tinymce/tinymce.min.js`}
               onInit={(evt, editor) => (editorRef.current = editor)}
               initialValue={
                 location.state
