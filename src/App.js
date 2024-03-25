@@ -4,9 +4,11 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "./themes/muiThemeContext";
 import MuiAdminPage from "./routes/MuiAdminPage";
 import MuiLogin from "./components/MuiLogin";
-import MuiAdminHome from "./components/MuiAdminHome";
 import MuiHomeSection from "./components/MuiHomeSection";
 import MuiPostsHome from "./components/MuiPostsHome";
+import MuiAdminViewPosts from "./views/MuiAdminViewPosts";
+import MuiAdminSection from "./components/MuiAdminSection";
+import MuiTinyMceTxtEditor from "./components/MuiTinyMceTxtEditor";
 
 function App() {
   return (
@@ -16,13 +18,22 @@ function App() {
         <div className="App">
           <Routes>
             <Route exact path="/admin" element={<MuiAdminPage />}>
-              <Route exact path="/admin" element={<MuiLogin />} />
-              <Route exact path="/admin/home" element={<MuiAdminHome />} />
+              <Route exact path="/admin" element={<MuiAdminSection />} />
+              <Route
+                exact
+                path="/admin/createPost"
+                element={<MuiTinyMceTxtEditor />}
+              />
+              <Route
+                exact
+                path="/admin/viewPosts"
+                element={<MuiAdminViewPosts />}
+              />
             </Route>
-
+            <Route exact path="/login" element={<MuiLogin />} />
             <Route exact path="/home" element={<MuiHomePage />}>
               <Route exact path="/home" element={<MuiHomeSection />} />
-              <Route exact path="/home/:postTitle" element={<MuiPostsHome />} />
+              <Route exact path="/home/posts/:postTitle" element={<MuiPostsHome />} />
             </Route>
 
             <Route path="*" element={<Navigate to={"/home"} />} />

@@ -24,6 +24,19 @@ function MuiLogin() {
     key: "",
   };
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/login`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.adminAuth) {
+          nav("/admin", { state: { adminData: data.adminAuth.adminData } });
+        }
+      })
+      .catch((err) => console.error("error from fetching cookie: ", err));
+  }, []);
+
   const handleSubmit = (values, { resetForm }) => {
     fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/login`, {
       method: "POST",
@@ -37,7 +50,7 @@ function MuiLogin() {
       .then((data) =>
         data?.message !== "OK"
           ? setSubmissionMessage(data.message)
-          : nav("/admin/home", { state: { adminData: data.login?.adminData } })
+          : nav("/admin", { state: { adminData: data.login?.adminData } })
       )
       .catch((err) => console.error("error from logging in: ", err));
     resetForm();

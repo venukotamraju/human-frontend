@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MuiAdminNavBar from "../components/MuiAdminNavBar";
-
+const AdminDataContext = createContext();
 function MuiAdminPage() {
+  const [adminData, setAdminData] = useState();
   const nav = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -12,23 +13,22 @@ function MuiAdminPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        if (data?.adminAuth) {
-          nav("/admin/home", {
-            state: { adminData: data.adminAuth.adminData },
-          });
-        }
+        data?.adminAuth
+          ? setAdminData({ adminData: data.adminAuth.adminData })
+          : nav("/login");
       })
       .catch((err) => console.error("error from fetching cookie: ", err));
   }, []);
   return (
     <Box>
-      {location.pathname === "/admin/home" ? (
+      {location.pathname === "/admin" ? (
         <MuiAdminNavBar login={true} />
       ) : (
         <MuiAdminNavBar login={false} />
       )}
-      <Outlet />
+      <AdminDataContext.Provider value={adminData}>
+        <Outlet />
+      </AdminDataContext.Provider>
     </Box>
   );
 }

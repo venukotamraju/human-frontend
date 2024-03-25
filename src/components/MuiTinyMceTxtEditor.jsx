@@ -2,29 +2,60 @@ import React, { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Box, Button, MenuItem, Paper, Stack, TextField } from "@mui/material";
 import { Formik, Form, Field } from "formik";
+import { useLocation, useNavigate } from "react-router-dom";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
+const moment = require("moment");
+const parseFn = function (val) {
+  return val === null ? null : moment(val).format("YYYY-MM-DD");
+};
 function MuiTinyMceTxtEditor() {
+  const location = useLocation();
+  console.log(location);
+  const nav = useNavigate();
   const editorRef = useRef();
+
   const initialValues = {
-    title: "",
-    image: "",
-    domain: "",
-    date: "",
+    title: location.state?.post_title,
+    image: location.state?.post_image_link,
+    domain: location.state?.domain,
+    date: parseFn(location.state?.post_date),
   };
+
   const handleSubmit = (values, { resetForm }) => {
-    fetch(`${process.env.REACT_APP_URLSERVER}api/v1/posts`, {
-      method: "POST",
-      body: JSON.stringify({
-        ...values,
-        content: editorRef.current.getContent(),
-      }),
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
+    fetch(
+      !location.state
+        ? `${process.env.REACT_APP_URLSERVER}api/v1/posts`
+        : `${process.env.REACT_APP_URLSERVER}api/v1/posts/${location.state.post_id}`,
+      {
+        method: !location.state ? "POST" : "PUT",
+        body: JSON.stringify({
+          ...values,
+          content: editorRef.current.getContent(),
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => console.error("error from submitting post: ", err));
     resetForm();
+  };
+  const handleDelete = () => {
+    fetch(
+      `${process.env.REACT_APP_URLSERVER}api/v1/posts/${location.state?.post_id}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((res) => res.json())
+      .then((data) =>
+        data?.message === "OK"
+          ? nav("/admin/viewPosts")
+          : console.log(data.message)
+      );
   };
   return (
     <Box component={Paper}>
@@ -64,6 +95,7 @@ function MuiTinyMceTxtEditor() {
                   helperText="Select a domain of the post"
                   variant="standard"
                   margin="dense"
+                  defaultValue={location?.state?.post_domain}
                   select
                   required
                   {...field}
@@ -97,9 +129,14 @@ function MuiTinyMceTxtEditor() {
               )}
             </Field>
             <Editor
-              tinymceScriptSrc={`${process.env.PUBLIC_URL}/tinymce/tinymce.min.js`}
+              apiKey={`${process.env.REACT_APP_TINYAPIKEY}`}
+              // tinymceScriptSrc={`${process.env.PUBLIC_URL}/tinymce/tinymce.min.js`}
               onInit={(evt, editor) => (editorRef.current = editor)}
-              initialValue="<h1>This is the initial value of the editor</h1>"
+              initialValue={
+                location.state
+                  ? location.state.post_content
+                  : "<h1>This is the initial value of the editor</h1>"
+              }
               init={{
                 height: 500,
                 menubar: true,
@@ -133,10 +170,27 @@ function MuiTinyMceTxtEditor() {
                   "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
               }}
             />
-            <Box width={"100%"} textAlign={"center"} p={3}>
-              <Button type="submit" onSubmit={handleSubmit}>
+            <Box
+              width={"100%"}
+              p={3}
+              display={"flex"}
+              gap={3}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Button type="submit" variant="outlined" onSubmit={handleSubmit}>
                 Submit Post
               </Button>
+              {location?.state ? (
+                <Button
+                  onClick={handleDelete}
+                  startIcon={<DeleteOutlineIcon color="primary" />}
+                  color="secondary"
+                  variant="outlined"
+                >
+                  Delete Post
+                </Button>
+              ) : null}
             </Box>
           </Stack>
         </Form>

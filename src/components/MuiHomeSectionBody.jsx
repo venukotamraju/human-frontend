@@ -44,7 +44,7 @@ function MuiHomeSectionBody() {
       sx={{
         overflowX: "hidden",
         overflowY: "scroll",
-        scrollbarWidth:"none",
+        scrollbarWidth: "none",
         scrollBehavior: "smooth",
       }}
     >
@@ -225,7 +225,7 @@ function MuiHomeSectionBody() {
                     secondaryAction={
                       <IconButton
                         onClick={() =>
-                          nav(`/home/${e.post_title}`, {
+                          nav(`/home/posts/${e.post_title}`, {
                             state: { ...e },
                           })
                         }

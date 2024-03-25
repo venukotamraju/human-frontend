@@ -17,6 +17,7 @@ const moment = require("moment");
 const parseFn = function (val) {
   return val === null ? null : moment(val).format("DD-MM-YYYY");
 };
+
 function MuiPostsHome() {
   const [postData, setPostData] = useState(useLocation().state || null);
   const { postTitle } = useParams();
