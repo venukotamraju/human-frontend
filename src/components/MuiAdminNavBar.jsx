@@ -1,3 +1,5 @@
+import Create from "@mui/icons-material/Create";
+import Search from "@mui/icons-material/Search";
 import {
   AppBar,
   Box,
@@ -10,7 +12,7 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function MuiAdminNavBar({ login }) {
+function MuiAdminNavBar() {
   const nav = useNavigate();
   const handleLogout = () => {
     fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/logout`, {
@@ -20,7 +22,7 @@ function MuiAdminNavBar({ login }) {
       .then((res) => res.json())
       .then((data) =>
         data?.message === "OK"
-          ? nav("/admin")
+          ? nav("/login")
           : console.error("unable to log out")
       )
       .catch((err) => console.error("logout failed: ", err));
@@ -46,7 +48,19 @@ function MuiAdminNavBar({ login }) {
             >
               Human.
             </Typography>
-            {login ? <Button onClick={handleLogout}>Log out</Button> : null}
+            <Button onClick={handleLogout}>Log out</Button>
+            <Button
+              startIcon={<Create />}
+              onClick={() => nav("/admin/createPost")}
+            >
+              Create Post
+            </Button>
+            <Button
+              startIcon={<Search />}
+              onClick={() => nav("/admin/viewPosts")}
+            >
+              View Posts
+            </Button>
           </Stack>
         </Toolbar>
       </AppBar>

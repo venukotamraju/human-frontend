@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import React, { createContext, useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import MuiAdminNavBar from "../components/MuiAdminNavBar";
+import MuiHomeFooter from "../components/MuiHomeFooter";
 const AdminDataContext = createContext();
 function MuiAdminPage() {
   const [adminData, setAdminData] = useState();
   const nav = useNavigate();
-  const location = useLocation();
   useEffect(() => {
     fetch(`${process.env.REACT_APP_URLSERVER}api/v1/admin/login`, {
       credentials: "include",
@@ -21,14 +21,13 @@ function MuiAdminPage() {
   }, []);
   return (
     <Box>
-      {location.pathname === "/admin" ? (
-        <MuiAdminNavBar login={true} />
-      ) : (
-        <MuiAdminNavBar login={false} />
-      )}
+      <MuiAdminNavBar />
+
       <AdminDataContext.Provider value={adminData}>
         <Outlet />
       </AdminDataContext.Provider>
+
+      <MuiHomeFooter />
     </Box>
   );
 }

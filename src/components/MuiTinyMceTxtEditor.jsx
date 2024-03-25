@@ -2,8 +2,7 @@ import React, { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Box, Button, MenuItem, Paper, Stack, TextField } from "@mui/material";
 import { Formik, Form, Field } from "formik";
-import { useLocation, useNavigate } from "react-router-dom";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useLocation } from "react-router-dom";
 
 const moment = require("moment");
 const parseFn = function (val) {
@@ -12,7 +11,6 @@ const parseFn = function (val) {
 function MuiTinyMceTxtEditor() {
   const location = useLocation();
   console.log(location);
-  const nav = useNavigate();
   const editorRef = useRef();
 
   const initialValues = {
@@ -42,20 +40,6 @@ function MuiTinyMceTxtEditor() {
       .then((data) => console.log(data))
       .catch((err) => console.error("error from submitting post: ", err));
     resetForm();
-  };
-  const handleDelete = () => {
-    fetch(
-      `${process.env.REACT_APP_URLSERVER}api/v1/posts/${location.state?.post_id}`,
-      {
-        method: "DELETE",
-      }
-    )
-      .then((res) => res.json())
-      .then((data) =>
-        data?.message === "OK"
-          ? nav("/admin/viewPosts")
-          : console.log(data.message)
-      );
   };
   return (
     <Box component={Paper}>
@@ -181,16 +165,6 @@ function MuiTinyMceTxtEditor() {
               <Button type="submit" variant="outlined" onSubmit={handleSubmit}>
                 Submit Post
               </Button>
-              {location?.state ? (
-                <Button
-                  onClick={handleDelete}
-                  startIcon={<DeleteOutlineIcon color="primary" />}
-                  color="secondary"
-                  variant="outlined"
-                >
-                  Delete Post
-                </Button>
-              ) : null}
             </Box>
           </Stack>
         </Form>

@@ -24,7 +24,7 @@ function MuiAdminSection() {
       alignItems={"center"}
       height={"80vh"}
     >
-      <Box width={"50%"}>
+      <Box width={{ xs: "100%", md: "50%" }}>
         <Card>
           <CardHeader
             title="Get it done! Admin 💪"

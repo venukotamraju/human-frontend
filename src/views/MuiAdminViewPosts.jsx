@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useNavigate } from "react-router-dom";
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
 
 const moment = require("moment");
 const parseFn = function (val) {
@@ -20,6 +21,7 @@ const parseFn = function (val) {
 };
 function MuiAdminViewPosts() {
   const [postsTableRows, setPostsTableRows] = useState();
+  const [reRenderOnDelete, setReRenderOnDelete] = useState(false);
 
   const nav = useNavigate();
 
@@ -32,7 +34,23 @@ function MuiAdminViewPosts() {
           ? setPostsTableRows({ data: data.data })
           : setPostsTableRows({ message: data.message });
       });
-  }, []);
+  }, [reRenderOnDelete]);
+
+  const handleDelete = (id) => {
+    fetch(`https://human-backend.onrender.com/api/v1/posts/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        data?.message === "OK"
+          ? setReRenderOnDelete(!reRenderOnDelete)
+          : console.log(data)
+      )
+      .catch((err) => console.log(err));
+  };
   return (
     <Box m={{ xs: 1, md: 4 }}>
       {postsTableRows?.data ? (
@@ -69,7 +87,12 @@ function MuiAdminViewPosts() {
                     </IconButton>
                   </TableCell>
                   <TableCell align="right">{post.post_domain}</TableCell>
-                  <TableCell align="right">{parseFn(post.post_date)}</TableCell>
+                  <TableCell align="right">
+                    {parseFn(post.post_date)}
+                    <IconButton onClick={() => handleDelete(post.post_id)}>
+                      <DeleteOutline />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
